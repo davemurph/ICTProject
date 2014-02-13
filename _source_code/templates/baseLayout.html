@@ -1,0 +1,29 @@
+<!-- baseLayout.html
+ICT Project
+D Murphy -->
+
+<!doctype html>
+<html>
+	<head>
+		<title>PyConvert</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/webapp.css') }}">
+	</head>
+	<body>
+		<header>
+			<div class="container">
+				<h1 class="logo">PyConvert(V0.1)</h1>
+				<nav>	
+					<ul class="menu">
+						<li><a href="{{ url_for('home') }}">Home</a></li>
+						<li><a href="{{ url_for('conversion') }}">Convert!</a></li>
+					</ul>
+				</nav>		
+			</div>
+		</header>
+	
+		<div class="container">
+			{% block content %}
+			{% endblock %}
+		</div>
+	</body>
+</html>

@@ -1,0 +1,40 @@
+<!-- conversion.html
+ICT Project
+D Murphy -->
+
+{% extends "baseLayout.html" %}
+
+{% block content %}	
+	{% if converted_amount %}
+		<h3><strong>{{ input_amount }} {{ from_currency}} = {{ converted_amount }} {{ to_currency }}</strong></h3>
+		<p id="conversion">[1.00 {{ from_currency }} = {{ specific_rate }} {{ to_currency }}]</p>
+		<br/>
+		<div class="convertPanel">
+			<a href="{{ url_for('conversion') }}" class="convertLink">Another Conversion</a>
+		</div>
+	{% else %}
+	
+		<h3>Select from currencies and enter conversion amount</h3>
+		<hr>
+	
+		{% for message in form.conversionAmount.errors %}
+			<div class="flash">{{ message }}</div>
+		{% endfor %}
+		
+		<form action="{{ url_for('conversion') }}" method="post">
+			{{ form.hidden_tag() }}
+		
+			{{ form.fromCurrency.label }}
+			{{ form.fromCurrency }}
+		
+			{{ form.toCurrency.label }}
+			{{ form.toCurrency }}
+		
+			{{ form.conversionAmount.label }}
+			{{ form.conversionAmount(autocomplete="off") }}	
+
+			{{ form.convertButton }}
+		</form>
+	
+	{% endif %}
+{% endblock %}
