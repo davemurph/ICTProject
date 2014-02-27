@@ -2,42 +2,41 @@
 # D Murphy
 #
 # rates.py
-# exchange rates and conversion functions
-# getSpecificRate() and exchange() return Strings
-# getRate() returns a float
 
-# populateCurrencyList() returns a list of currencies from 
-# dicts in exchange_rates to populate WTForms SelectFields
+# functions to perform conversion calculations
+# with data retrieved from exchange_api
+
+import json, requests
+from requests.auth import HTTPBasicAuth
+
+# assign URL's for exchange_api
+api_convert_url = 'http://localhost:8000/testapi/convert'
 
 
-# exchange rates are relative to 1.0 * Euro
-exchange_rates = 	{'EUR': 1.0, 
-					'USD': 1.36379, 
-					'GBP': 0.82910, 
-					'AUD': 1.51202, 
-					'CAD': 1.50140, 
-					'NZD': 1.64072}
+# define headers for JSON data
+headers = {'Content-Type': 'application/json'}
 
-def populateCurrencyList():
-	currencyList = []
-	for currency in exchange_rates:
-		currencyList.append((currency, currency))
+
+def convert_currency(user, from_currency, to_currency, amount):
 		
-	return currencyList
-
-def getRate(currency):
-	if currency in exchange_rates:
-		return exchange_rates[currency]
-		
-def getSpecificRate(from_currency, to_currency):
-	from_rate = exchange_rates[from_currency]		
-	to_rate = exchange_rates[to_currency]
-		
-	return '%.5f' % (to_rate / from_rate)
-			
-def exchange(from_currency, to_currency, amount):
-	from_rate = exchange_rates[from_currency]		
-	to_rate = exchange_rates[to_currency]
-		
-	return '%.2f' % (amount * to_rate / from_rate)
+	# define parameters for HTTP POST request to exchange_api
+	request_params = {'from_currency': from_currency,
+					'to_currency': to_currency,
+					'amount': amount}
 	
+	# encode parameters as JSON
+	json_request_params =  json.dumps(request_params)
+	
+	# POST to exchange_api with parameters and 
+	json_response = requests.post(api_convert_url, json_request_params, 
+									headers=headers, auth=user)
+		
+	# decode JSON response
+	result = json_response.json()	
+	
+	# convert response values to formatted strings for presentation
+	converted_amount = '%.2f' % result['converted_amount']
+	unit_rate = '%.5f' % result['unit_rate']
+	
+	return {'converted_amount': converted_amount, 'unit_rate': unit_rate}
+			

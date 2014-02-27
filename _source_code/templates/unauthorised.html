@@ -1,0 +1,17 @@
+{% extends "baseLayout.html" %}
+
+{% block content %}
+	<div class="jumbo">
+		<h3 class="home">Unauthorised user - no access to API allowed</h3>
+		<hr>
+	</div>
+	
+	{% for message in get_flashed_messages() %}
+		<div class="flash">{{ message }}</div>
+	{% endfor %}
+	
+	<div class="menu">
+		<h4><a href="{{ url_for('home') }}">Back to Home Page</a></h4>
+	</div>
+	
+{% endblock %}

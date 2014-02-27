@@ -7,7 +7,8 @@ D Murphy -->
 {% block content %}	
 	{% if converted_amount %}
 		<h3><strong>{{ input_amount }} {{ from_currency}} = {{ converted_amount }} {{ to_currency }}</strong></h3>
-		<p id="conversion">[1.00 {{ from_currency }} = {{ specific_rate }} {{ to_currency }}]</p>
+		<p id="conversion">[1.00 {{ from_currency }} = {{ unit_rate }} {{ to_currency }}]</p>
+		<p id="conversion">Currency rates last updated {{ last_update }}</p>
 		<br/>
 		<div class="convertPanel">
 			<a href="{{ url_for('conversion') }}" class="convertLink">Another Conversion</a>
@@ -17,9 +18,15 @@ D Murphy -->
 		<h3>Select from currencies and enter conversion amount</h3>
 		<hr>
 	
-		{% for message in form.conversionAmount.errors %}
-			<div class="flash">{{ message }}</div>
-		{% endfor %}
+		{% if form.conversionAmount.errors %}
+			{% for message in form.conversionAmount.errors %}
+				<div class="flash">{{ message }}</div>
+			{% endfor %}
+		{% else %}
+			{% for message in get_flashed_messages() %}
+				<div class="flash">{{ message }}</div>
+			{% endfor %}
+		{% endif %}
 		
 		<form action="{{ url_for('conversion') }}" method="post">
 			{{ form.hidden_tag() }}
