@@ -6,7 +6,8 @@
 
 from flask import flash, url_for, redirect
 from flask.ext.wtf import Form
-from wtforms import TextField, SubmitField, SelectField, validators, ValidationError 
+from wtforms import TextField, SubmitField, SelectField, validators
+from wtforms import ValidationError 
 import json, requests
 
 
@@ -25,7 +26,8 @@ headers = {'Content-Type': 'application/json'}
 def populate_currencies():
 	# populate currency SelectFields with currencies in exchange_api
 	# must check response code prior to populating
-	json_currencies = requests.get(api_getcurrencies_url, headers=headers, auth=user)
+	json_currencies = requests.get(api_getcurrencies_url, headers=headers, 
+									auth=user)
 	if json_currencies.status_code == 403:
 		flash('You are not an authorised user')
 		return redirect(url_for('home'))
@@ -40,10 +42,15 @@ class ConversionForm(Form):
 	
 	currencies = populate_currencies()	
 	
-	fromCurrency = SelectField('From currency:', choices=currencies['currency_list'])
-	toCurrency = SelectField('To currency:', choices=currencies['currency_list'])
+	fromCurrency = SelectField('From currency:', 
+								choices=currencies['currency_list'])
 
-	conversionAmount = TextField("Enter amount to convert:", [validators.Required("Please enter a conversion amount")])
+	toCurrency = SelectField('To currency:', 
+								choices=currencies['currency_list'])
+
+	conversionAmount = TextField("Enter amount to convert:", 
+				[validators.Required("Please enter a conversion amount")])
+	
 	convertButton = SubmitField("Convert")
 		
 	def __init__(self, *args, **kwargs):
