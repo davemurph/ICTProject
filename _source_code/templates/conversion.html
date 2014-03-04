@@ -11,7 +11,7 @@ D Murphy -->
 		<p id="conversion">Currency rates last updated {{ last_update }}</p>
 		<br/>
 		<div class="convertPanel">
-			<a href="{{ url_for('conversion') }}" class="convertLink">Another Conversion</a>
+			<a href="{{ url_for('convert') }}" class="convertLink">Another Conversion</a>
 		</div>
 	{% else %}
 	
@@ -28,7 +28,7 @@ D Murphy -->
 			{% endfor %}
 		{% endif %}
 		
-		<form action="{{ url_for('conversion') }}" method="post">
+		<form action="{{ url_for('convert') }}" method="post">
 			{{ form.hidden_tag() }}
 		
 			{{ form.fromCurrency.label }}

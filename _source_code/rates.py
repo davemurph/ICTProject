@@ -6,6 +6,10 @@
 # functions to perform conversion calculations
 # with data retrieved from exchange_api
 
+####################################
+####  NOT USED (04 March 2014)  ####
+####################################
+
 import json, requests
 from requests.auth import HTTPBasicAuth
 
