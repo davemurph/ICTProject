@@ -6,10 +6,13 @@ D Murphy -->
 
 {% block content %}	
 	{% if converted_amount %}
-		<h3><strong>{{ input_amount }} {{ from_currency}} = {{ converted_amount }} {{ to_currency }}</strong></h3>
-		<p id="conversion">[1.00 {{ from_currency }} = {{ unit_rate }} {{ to_currency }}]</p>
-		<p id="conversion">Currency rates last updated {{ last_update }}</p>
-		<br/>
+		<div class="results">
+			<h3 class="results">{{ input_amount }} {{ from_currency }} = {{ converted_amount }} {{ to_currency }}</h3>
+			<p class="results">{{ from_currency_label }}     < --- >    {{ to_currency_label }}</p>
+			<p class="results">[1.00 {{ from_currency }} = {{ unit_rate }} {{ to_currency }}]</p>
+			<p class="results">Currency rates last updated {{ last_update }}</p>
+			<br/>
+		</div>
 		<div class="convertPanel">
 			<a href="{{ url_for('convert') }}" class="convertLink">Another Conversion</a>
 		</div>

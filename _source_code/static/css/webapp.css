@@ -20,7 +20,7 @@ body {
   
 header {
   background-color: #2B2B2B;
-  height: 35px;
+  height: 2.2em;
   width: 100%;
   opacity: .9;
   margin-bottom: 10px;
@@ -38,22 +38,45 @@ header h1.logo:hover {
   color: #fff;
   text-decoration: none;
 }
+
+/*
+ * Display navigation links inline
+ */
  
+.menu {
+  float: right;
+  margin-top: 8px;
+}
+ 
+.menu li {
+  display: inline;
+}
+ 
+.menu li + li {
+  margin-left: 35px;
+}
+ 
+.menu li a {
+  color: #999;
+  text-decoration: none;
+}
+
 /*
  * Center the body content
  */
   
 .container {
-  width: 940px;
+  width: 55em;
   margin: 0 auto;
 }
- 
+
+/* homepage main */ 
 div.jumbo {
   padding: 10px 0 30px 0;
   background-color: #eeeeee;
-  -webkit-border-radius: 6px;
-     -moz-border-radius: 6px;
-          border-radius: 6px;
+  -webkit-border-radius: 8px;
+     -moz-border-radius: 8px;
+          border-radius: 8px;
 }
  
 h2 {
@@ -81,26 +104,44 @@ h3.home {
   color: #999;
 }
 
-p#conversion {
+div.results {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  height: 9.5em;
+  width: 30em;
+  padding: 10px 0 20px 0;
+  background-color: #eeeeee;
+  -webkit-border-radius: 8px;
+     -moz-border-radius: 8px;
+          border-radius: 8px;
+}
+
+p.results {
 	font-size: 1.0em;
-	font-weight: 100;
-	margin-top: 30px;
-	text-align: left;
+	text-align: center;
 	letter-spacing: -1px;
 	color: black;
 }
 
+h3.results {
+  font-size: 1.7em;
+  margin-bottom: -0.5em;
+
+  text-align: center;
+  letter-spacing: -1px;
+  color: #525252;
+  font-weight: bold;
+}
+
 .convertLink {
 	display: block;	
-	border:1px solid #d8d8d8;
+	border: 1px solid #d8d8d8;
 	border-radius: 0.4em;
 	font-weight: bold; 
 	text-align: center; 
 	color: #000000; 
 	background-color: #f4f4f4;	
-    float: left;
-    
-		
+  float: left;    
 }
 
 .convertPanel a:link, .convertPanel a:visited { 
@@ -114,27 +155,6 @@ p#conversion {
 	background-color: gainsboro; 
 }
 
-/*
- * Display navigation links inline
- */
- 
-.menu {
-  float: right;
-  margin-top: 8px;
-}
- 
-.menu li {
-  display: inline;
-}
- 
-.menu li + li {
-  margin-left: 35px;
-}
- 
-.menu li a {
-  color: #999;
-  text-decoration: none;
-}
 
 /* Contact form */
 form label {
@@ -146,7 +166,7 @@ form label {
  
 form #fromCurrency,
 form #toCurrency {
-  width: 10em;
+  width: 14em;
   background-color: #fafafa;
   -webkit-border-radius: 3px;
      -moz-border-radius: 3px;
