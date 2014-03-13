@@ -9,10 +9,11 @@ from forms import ConversionForm, ResultForm, EnterForm
 from currencies import Currencies
 import json, requests
 from decimal import Decimal
+import keyring
 
-user = ('daithi', 'pass1234') # dummy user for exchange_api
+user = ('daithi', keyring.get_password('exchange-api', 'daithi')) # dummy user for exchange_api
 
-api_convert_url = 'http://localhost:8000/testapi/convert'
+api_convert_url = 'http://exchange-api-eventlet.herokuapp.com/testapi/convert'
 
 headers = {'Content-Type': 'application/json'}
 
@@ -102,6 +103,9 @@ def convert():
 			return redirect(url_for('unauthorised'))
 
 		elif currency_feed.request_status_code == 404:
+			return redirect(url_for('unavailable'))
+
+		elif currency_feed.request_status_code == 503:
 			return redirect(url_for('unavailable'))
 
 		elif currency_feed.request_status_code == 'connection_error':
