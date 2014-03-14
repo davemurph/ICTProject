@@ -4,17 +4,18 @@
 # routes.py
 
 from _source_code import app
-from flask import Flask, request, redirect, url_for, render_template, flash, jsonify
-from forms import ConversionForm, ResultForm, EnterForm
-from currencies import Currencies
+from flask import Flask, request, redirect, url_for, render_template, jsonify
+from forms import ConversionForm, EnterForm
 import json, requests
 from decimal import Decimal
-import keyring
+from configobj import ConfigObj
 
-user = ('daithi', keyring.get_password('exchange-api', 'daithi')) # dummy user for exchange_api
 
-api_convert_url = 'http://exchange-api-eventlet.herokuapp.com/testapi/convert'
-
+# config data
+config = ConfigObj('config_settings.ini')
+user = (config['userinfo']['username'], config['userinfo']['password'])
+api_getcurrencies_url = config['urls']['url_getcurrencies']
+api_convert_url = config['urls']['url_convert']
 headers = {'Content-Type': 'application/json'}
 
 
@@ -31,14 +32,18 @@ def home():
 
 @app.route('/convert', methods=['GET', 'POST'])
 def convert():	
-	currency_feed = Currencies()
-
-	currency_feed.test_feed_connection()
-
-	if currency_feed.request_status_code == 200: # case connection succeeded
+	try:
 		form = ConversionForm()
 		
-		currency_dict = currency_feed.get_currency_list()['currency_list']
+		json_currency_request = requests.get(api_getcurrencies_url, 
+											 headers=headers, 
+											 auth=user)
+
+		if json_currency_request.status_code != 200:
+			response_code = json_currency_request.status_code
+			raise CurrencyFeedException()
+
+		currency_dict = json_currency_request.json()['currency_list']
 
 		currency_code_list = []
 		for currency_code in currency_dict:
@@ -59,10 +64,10 @@ def convert():
 				from_currency = form.fromCurrency.data
 				from_currency_label = currency_dict[from_currency]
 
-				to_currency = 	form.toCurrency.data
+				to_currency = form.toCurrency.data
 				to_currency_label = currency_dict[to_currency]
 
-				amount = 		form.conversionAmount.data
+				amount = form.conversionAmount.data
 			
 				request_parameters = {'from_currency': from_currency,
 									  'to_currency': to_currency,
@@ -75,40 +80,38 @@ def convert():
 											  headers=headers, 
 											  auth=user)
 
-				if json_response.status_code == 403:
-					return redirect(url_for('unauthorised'))
-				
-				else:
-					result = json_response.json()
-				
-					converted_amount = round_to_two_places(result['converted_amount'])
-					unit_rate = 	   round_to_six_places(result['unit_rate'])
-					formatted_amount = round_to_two_places(amount)
-					last_update = 	   result['last_update']
+				if json_response.status_code != 200:
+					response_code = json_response.status_code
+					raise CurrencyFeedException()				
 
-		
-					return render_template('conversion.html', 
-											form = form, 
-											input_amount = formatted_amount, 
-											from_currency = from_currency,
-											from_currency_label = from_currency_label,
-											to_currency = to_currency, 
-											to_currency_label = to_currency_label,
-											converted_amount = converted_amount, 
-											unit_rate = unit_rate, 
-											last_update = last_update)
+				result = json_response.json()
+				
+				converted_amount = round_to_two_places(result['converted_amount'])
+				unit_rate = 	   round_to_six_places(result['unit_rate'])
+				formatted_amount = round_to_two_places(amount)
+				last_update = 	   result['last_update']
 
-	else: # case connection failed
-		if currency_feed.request_status_code == 403:
+				return render_template('conversion.html', 
+										form = form, 
+										input_amount = formatted_amount, 
+										from_currency = from_currency,
+										from_currency_label = from_currency_label,
+										to_currency = to_currency, 
+										to_currency_label = to_currency_label,
+										converted_amount = converted_amount, 
+										unit_rate = unit_rate, 
+										last_update = last_update)
+	except CurrencyFeedException:
+		if response_code == 403:
 			return redirect(url_for('unauthorised'))
 
-		elif currency_feed.request_status_code == 404:
+		elif response_code == 404:
 			return redirect(url_for('unavailable'))
 
-		elif currency_feed.request_status_code == 503:
+		elif response_code == 503:
 			return redirect(url_for('unavailable'))
 
-		elif currency_feed.request_status_code == 'connection_error':
+		else:
 			return redirect(url_for('unavailable'))
 
 
@@ -130,3 +133,6 @@ def round_to_two_places(amount):
 def round_to_six_places(amount):
 	FIVEPLACES = Decimal('.000001')
 	return Decimal(amount).quantize(FIVEPLACES)
+
+class CurrencyFeedException(Exception):
+	pass
