@@ -61,12 +61,19 @@ header h1.logo:hover {
   text-decoration: none;
 }
 
+
+/* login status */
+#login {
+  text-align: right;
+  font-size: 0.8em;
+}
+
 /*
  * Center the body content
  */
   
 .container {
-  width: 55em;
+  width: 45em;
   margin: 0 auto;
 }
 
@@ -80,7 +87,7 @@ div.jumbo {
 }
  
 h2 {
-  font-size: 3em;
+  font-size: 2.5em;
   margin-top: 40px;
   text-align: center;
   letter-spacing: -2px;
@@ -189,7 +196,8 @@ form #conversionAmount {
  
 form input#convertButton,
 form input#clearButton,
-form input#enterButton {
+form input#enterButton,
+form input#submit {
 	margin-top: 0.8em;
   display: block;
   -webkit-border-radius: 3px; 
@@ -212,7 +220,9 @@ form input#enterButton {
  
 form input#convertButton:hover,
 form input#clearButton:hover,
-form input#enterButton:hover{
+form input#enterButton:hover,
+form input#submit:hover 
+{
   cursor: pointer;
   border:1px solid #c1c1c1; 
   background-color: #dbdbdb;
@@ -238,8 +248,7 @@ form input#enterButton {
 }
 
 /* Signup form */
-form input#firstname,
-form input#lastname,
+form input#email,
 form input#password {
   width: 400px;
   background-color: #fafafa;
@@ -254,3 +263,4 @@ form input#password {
 form input#password {
   margin-bottom: 10px;
 }
+

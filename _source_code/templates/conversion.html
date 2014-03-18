@@ -4,7 +4,8 @@ D Murphy -->
 
 {% extends "baseLayout.html" %}
 
-{% block content %}	
+{% block content %}
+
 	{% if converted_amount %}
 		<div class="results">
 			<h3 class="results">{{ input_amount }} {{ from_currency }} = {{ converted_amount }} {{ to_currency }}</h3>

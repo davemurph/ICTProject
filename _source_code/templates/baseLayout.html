@@ -15,11 +15,24 @@ D Murphy -->
 				<nav>	
 					<ul class="menu">
 						<li><a href="{{ url_for('home') }}">Home</a></li>
-						<li><a href="{{ url_for('convert') }}">Convert!</a></li>
+						{% if 'email' in session %}
+							<li><a href="{{ url_for('convert') }}">Convert</a></li>
+							<li><a href="{{ url_for('logout') }}">Logout</a></li>
+						{% else %}
+							<li><a href="{{ url_for('login') }}">Login</a></li>
+							<li><a href="{{ url_for('joinus') }}">Join Us!</a></li>
+						{% endif %}
 					</ul>
-				</nav>		
+				</nav>					
 			</div>
 		</header>
+		<div class="container">
+			<div id="login">
+				{% if 'email' in session %}
+					<p>Logged in as {{ session['email'] }}</p>
+				{% endif %}	
+			</div>
+		</div>		
 	
 		<div class="container">
 			{% block content %}
