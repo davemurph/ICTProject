@@ -5,18 +5,21 @@
 
 from _source_code import app
 from flask import Flask, request, redirect, url_for, render_template, jsonify, session
-from forms import ConversionForm, EnterForm, JoinUsForm, LoginForm
+from forms import ConversionForm, EnterForm, JoinUsForm, LoginForm, LoginUserException
 import json, requests
 from decimal import Decimal
 from configobj import ConfigObj
-from models import db, User
+from werkzeug import generate_password_hash, check_password_hash
+
 
 
 # config data
-config = ConfigObj('config_settings.ini')
+config = ConfigObj('config_settings_dev.ini')
 user = (config['userinfo']['username'], config['userinfo']['password'])
 api_getcurrencies_url = config['urls']['url_getcurrencies']
 api_convert_url = config['urls']['url_convert']
+api_loginuser_url = config['urls']['url_loginuser']
+api_createuser_url = config['urls']['url_createuser']
 headers = {'Content-Type': 'application/json'}
 
 
@@ -39,15 +42,25 @@ def joinus():
 		return redirect(url_for('home'))
 
 	if request.method == 'POST':
-		if form.validate() == False:
-			return render_template('joinus.html', form=form)
-		else:
-			newuser = User(form.email.data, form.password.data)
-			db.session.add(newuser)
-			db.session.commit()
+		try:
+			if form.validate() == False:
+				return render_template('joinus.html', form=form)
+			else:
+				email = form.email.data
+				password = form.password.data
+			
+				request_parameters = {'email': email, 'password': password}
+				json_request_parameters = json.dumps(request_parameters)
+				json_response = requests.post(api_createuser_url, 
+											  data = json_request_parameters, 
+											  headers = headers)
 
-			session['email'] = newuser.email
-			return redirect(url_for('home'))
+				session['email'] = email
+				session['password'] = form.password.data
+				return redirect(url_for('home'))
+
+		except LoginUserException:
+			return redirect(url_for('unavailable'))
 
 	elif request.method == 'GET':
 		return render_template('joinus.html', form = form)
@@ -61,11 +74,16 @@ def login():
 		return redirect(url_for('home'))
 
 	if request.method == 'POST':
-		if form.validate() == False:
-			return render_template('login.html', form=form)
-		else:
-			session['email'] = form.email.data
-			return redirect(url_for('home'))
+		try:
+			if form.validate() == False:
+				return render_template('login.html', form=form)
+			else:
+				session['email'] = form.email.data
+				session['password'] = form.password.data
+				return redirect(url_for('home'))
+
+		except LoginUserException:
+			return redirect(url_for('unavailable'))
 
 	elif request.method == 'GET':
 		return render_template('login.html', form = form)
@@ -85,17 +103,21 @@ def convert():
 	if 'email' not in session:
 		return redirect(url_for('login'))
 
-	user_in_session = User.query.filter_by(email = session['email']).first()
+	user_in_session = session['email']
 
 	if user_in_session is None:
 		return redirect(url_for('home'))
 	else:
 		try:
 			form = ConversionForm()
+
+			http_auth_username = user_in_session
+			http_auth_password = session['password']
+			http_auth_user = (http_auth_username, http_auth_password)
 		
 			json_currency_request = requests.get(api_getcurrencies_url, 
-												 headers=headers, 
-												 auth=user)
+												 headers = headers, 
+												 auth = http_auth_user)
 
 			if json_currency_request.status_code != 200:
 				response_code = json_currency_request.status_code
@@ -135,8 +157,8 @@ def convert():
 			
 					json_response = requests.post(api_convert_url, 
 											 	 json_request_parameters, 
-											 	 headers=headers, 
-											 	 auth=user)
+											 	 headers = headers, 
+											 	 auth = http_auth_user)
 
 					if json_response.status_code != 200:
 						response_code = json_response.status_code
