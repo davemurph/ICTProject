@@ -30,7 +30,6 @@ header h1.logo {
   margin: 0;
   font-size: 1.7em;
   color: #fff;
-  text-transform: uppercase;
   float: left;
 }
  
@@ -66,6 +65,8 @@ header h1.logo:hover {
 #login {
   text-align: right;
   font-size: 0.8em;
+  color: #669CF2;
+  font-weight: bold;
 }
 
 /*
@@ -249,15 +250,19 @@ form input#enterButton {
 
 /* Message flashing */
 .flash {
-  background-color: #FBB0B0;
+  margin: 3px;
+  background-color: #F53333;
   padding: 10px;
   width: 400px;
   border-radius: 0.2em;
+  color: white;
+  font-weight: bold;
 }
 
 /* Signup form */
 form input#email,
-form input#password {
+form input#password,
+form input#password_confirm {
   width: 400px;
   background-color: #fafafa;
   -webkit-border-radius: 3px;
