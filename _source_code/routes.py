@@ -13,7 +13,7 @@ from models import db, User
 
 
 # config data
-config = ConfigObj('config_settings_dev.ini')
+config = ConfigObj('config_settings.ini')
 user = (config['userinfo']['username'], config['userinfo']['password'])
 api_getcurrencies_url = config['urls']['url_getcurrencies']
 api_convert_url = config['urls']['url_convert']

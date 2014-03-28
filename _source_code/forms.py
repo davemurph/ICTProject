@@ -27,9 +27,14 @@ class ConversionForm(Form):
 	
 		try:
 			amount = float(self.conversionAmount.data)
+			if amount < 0.0:
+				raise NegativeValueException
 			return True
 		except ValueError:
 			self.conversionAmount.errors.append('You must enter a numerical value! Try again.')
+			return False
+		except NegativeValueException:
+			self.conversionAmount.errors.append('You cannot enter a negative number')
 			return False
 	
 	
@@ -79,3 +84,6 @@ class LoginForm(Form):
 		else:
 			self.email.errors.append('Invalid e-mail address or password')
 		return False
+
+class NegativeValueException(Exception):
+	pass
