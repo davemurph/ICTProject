@@ -5,7 +5,8 @@ app = Flask(__name__)
 
 # config
 app.secret_key = 'development key'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://daithi:david1979@localhost/pythondb'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://daithi:pass1234@localhost/client_db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/test.db'
 
 db.init_app(app)
 

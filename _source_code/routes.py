@@ -11,10 +11,12 @@ from decimal import Decimal
 from configobj import ConfigObj
 from models import db, User
 
+from datetime import datetime, date
+
 
 # config data
 config = ConfigObj('config_settings.ini')
-user = (config['userinfo']['username'], config['userinfo']['password'])
+subscriber = (config['userinfo']['username'], config['userinfo']['password'])
 api_getcurrencies_url = config['urls']['url_getcurrencies']
 api_convert_url = config['urls']['url_convert']
 headers = {'Content-Type': 'application/json'}
@@ -94,8 +96,8 @@ def convert():
 			form = ConversionForm()
 		
 			json_currency_request = requests.get(api_getcurrencies_url, 
-												 headers=headers, 
-												 auth=user)
+												 headers = headers, 
+												 auth = subscriber)
 
 			if json_currency_request.status_code != 200:
 				response_code = json_currency_request.status_code
@@ -135,8 +137,8 @@ def convert():
 			
 					json_response = requests.post(api_convert_url, 
 											 	 json_request_parameters, 
-											 	 headers=headers, 
-											 	 auth=user)
+											 	 headers = headers, 
+											 	 auth = subscriber)
 
 					if json_response.status_code != 200:
 						response_code = json_response.status_code
@@ -147,8 +149,18 @@ def convert():
 					converted_amount = round_to_two_places(result['converted_amount'])
 					unit_rate = 	   round_to_six_places(result['unit_rate'])
 					formatted_amount = round_to_two_places(amount)
-					last_update = 	   result['last_update']
+					last_update =  	   result['last_update']
 
+
+					'''print last_update
+					#print date.ctime()
+
+					new_time = datetime.strptime(last_update, '%a, %b %d %Y %H:%S')
+					print new_time
+					print time.strptime(new_time, "%d %b %y")'''
+
+
+					
 					return render_template('conversion.html', 
 											form = form, 
 											input_amount = formatted_amount, 
