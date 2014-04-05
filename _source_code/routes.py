@@ -4,14 +4,14 @@
 # routes.py
 
 from _source_code import app
-from flask import Flask, request, redirect, url_for, render_template, jsonify, session
+from flask import Flask, request, redirect, url_for, render_template, jsonify, session, json
 from forms import ConversionForm, EnterForm, JoinUsForm, LoginForm
-import json, requests
+import requests
 from decimal import Decimal
 from configobj import ConfigObj
 from models import db, User
-
 from datetime import datetime, date
+from pytz import timezone
 
 
 # config data
@@ -19,6 +19,7 @@ config = ConfigObj('config_settings.ini')
 subscriber = (config['userinfo']['username'], config['userinfo']['password'])
 api_getcurrencies_url = config['urls']['url_getcurrencies']
 api_convert_url = config['urls']['url_convert']
+local_timezone = config['timezone']['local_timezone']
 headers = {'Content-Type': 'application/json'}
 
 
@@ -146,19 +147,16 @@ def convert():
 
 					result = json_response.json()
 				
-					converted_amount = round_to_two_places(result['converted_amount'])
-					unit_rate = 	   round_to_six_places(result['unit_rate'])
-					formatted_amount = round_to_two_places(amount)
-					last_update =  	   result['last_update']
+					converted_amount = 		round_to_two_places(result['converted_amount'])
+					unit_rate = 	   		round_to_six_places(result['unit_rate'])
+					formatted_amount = 		round_to_two_places(amount)
+					last_update_timestamp =	result['last_update']
 
-
-					'''print last_update
-					#print date.ctime()
-
-					new_time = datetime.strptime(last_update, '%a, %b %d %Y %H:%S')
-					print new_time
-					print time.strptime(new_time, "%d %b %y")'''
-
+					
+					last_update_datetime_gmt = 		  datetime.strptime(last_update_timestamp, '%a, %d %b %Y %H:%M:%S %Z')
+					last_update_datetime_utc = 		  last_update_datetime_gmt.replace(tzinfo = timezone('UTC'))
+					last_update_datetime_localtime =  last_update_datetime_utc.astimezone(timezone(local_timezone))
+					last_update_localtime_formatted = last_update_datetime_localtime.strftime('%A %b %d %Y, %H:%M:%S')
 
 					
 					return render_template('conversion.html', 
@@ -170,7 +168,7 @@ def convert():
 											to_currency_label = to_currency_label,
 											converted_amount = converted_amount, 
 											unit_rate = unit_rate, 
-											last_update = last_update)
+											last_update = last_update_localtime_formatted)
 		except CurrencyFeedException:
 			if response_code == 403:
 				return redirect(url_for('unauthorised'))
