@@ -11,7 +11,7 @@ D Murphy -->
 	<body>
 		<header>
 			<div class="container">
-				<h1 class="logo">PyConvert(V0.2)</h1>
+				<h1 class="logo">PyConvert</h1>
 				<nav>	
 					<ul class="menu">
 						<li><a href="{{ url_for('home') }}">Home</a></li>
@@ -27,9 +27,12 @@ D Murphy -->
 			</div>
 		</header>
 		<div class="container">
-			<div id="login">
+			<div id="loginstatus">
 				{% if 'email' in session %}
 					<p>logged in as {{ session['email'] }}</p>
+				{% else %}
+					<br/>
+					<br/>
 				{% endif %}	
 			</div>
 		</div>		

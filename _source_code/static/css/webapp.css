@@ -60,11 +60,15 @@ header h1.logo:hover {
   text-decoration: none;
 }
 
+.menu li a:hover {
+  color: #F2F2F2;
+}
+
 
 /* login status */
-#login {
+#loginstatus {
   text-align: right;
-  font-size: 0.8em;
+  font-size: 0.9em;
   color: #669CF2;
   font-weight: bold;
 }
@@ -74,42 +78,60 @@ header h1.logo:hover {
  */
   
 .container {
-  width: 45em;
+  width: 40em;
   margin: 0 auto;
+  background-image: url('images/currencies.png');
+  /* Background image adapted from https://www.munknee.com/wp-content/uploads/2013/04/currencies.jpg */
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 2.5em;
+  text-align: center;
+  letter-spacing: -2px;
+  color: #4D4D4D;
+}
+ 
+h3 {
+  margin: 10px;
+  font-size: 1.7em;
+  font-weight: 100;
+  text-align: left;
+  letter-spacing: -1px;
+  color: #999;
+}
+
+p {
+  font-size: 0.9em;
+  margin: 5px;
+  padding: 5px 0 5px 0;
 }
 
 /* homepage main */ 
 div.jumbo {
   padding: 10px 0 30px 0;
   background-color: #eeeeee;
+  opacity: 0.6;
   -webkit-border-radius: 8px;
      -moz-border-radius: 8px;
           border-radius: 8px;
 }
- 
-h2 {
+
+.jumbo h2 {
   font-size: 2.5em;
   margin-top: 40px;
+  margin-bottom: 30px;
   text-align: center;
   letter-spacing: -2px;
-}
- 
-h3 {
-  font-size: 1.7em;
-  font-weight: 100;
-  margin-top: 30px;
-  text-align: left;
-  letter-spacing: -1px;
-  color: #999;
+  color: #1A1A1A;
 }
 
-h3.home {
-  font-size: 1.7em;
-  font-weight: 100;
-  margin-top: 30px;
+.jumbo h3 {
+  margin: 0;
   text-align: center;
   letter-spacing: -1px;
-  color: #999;
+  color: #636363;
 }
 
 a.links {
@@ -121,35 +143,50 @@ a.links {
 }
 
 div.results {
+  opacity: 0.6;
+  margin-left: auto;
+  margin-right: auto;
   margin-top: 1em;
   margin-bottom: 1em;
-  height: 9.5em;
+  height: 11.5em;
   width: 30em;
-  padding: 10px 0 20px 0;
   background-color: #eeeeee;
   -webkit-border-radius: 8px;
      -moz-border-radius: 8px;
           border-radius: 8px;
 }
 
-p.results {
-	font-size: 1.0em;
+.results h3 {
+  font-size: 1.9em;
+  text-align: center;
+  letter-spacing: -1px;
+  color: #1C1C1C;
+  font-weight: bold;
+}
+
+.results p {
+  font-size: 1.05em;
+  margin: 0;
+  padding: 5px;
 	text-align: center;
 	letter-spacing: -1px;
 	color: black;
 }
 
-h3.results {
-  font-size: 1.7em;
-  margin-bottom: -0.5em;
-
-  text-align: center;
-  letter-spacing: -1px;
-  color: #525252;
+p#resultsBold {
+  font-size: 1.1em;
   font-weight: bold;
+  padding-top: 0;
+}
+
+p#resultIntro {
+  text-align: left;
 }
 
 .convertLink {
+  margin-left: auto;
+  margin-right: auto;
+  width: 10em;
 	display: block;	
 	border: 1px solid #d8d8d8;
 	border-radius: 0.4em;
@@ -157,7 +194,7 @@ h3.results {
 	text-align: center; 
 	color: #000000; 
 	background-color: #f4f4f4;	
-  float: left;    
+     
 }
 
 .convertPanel a:link, .convertPanel a:visited { 
@@ -172,7 +209,7 @@ h3.results {
 }
 
 
-/* Contact form */
+/* Forms */
 form label {
   font-size: 1.2em;
   font-weight: bold;

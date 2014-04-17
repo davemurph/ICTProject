@@ -8,15 +8,22 @@ D Murphy -->
 
 	{% if converted_amount %}
 		<div class="results">
-			<h3 class="results">{{ input_amount }} {{ from_currency }} = {{ converted_amount }} {{ to_currency }}</h3>
-			<p class="results">{{ from_currency_label }}     < --- >    {{ to_currency_label }}</p>
-			<p class="results">[1.00 {{ from_currency }} = {{ unit_rate }} {{ to_currency }}]</p>
-			<p class="results">Currency rates last updated {{ last_update }}</p>
+			<p id = "resultIntro">your live currency conversion....</p>
+			<h3>{{ input_amount }} {{ from_currency }} = {{ converted_amount }} {{ to_currency }}</h3>
+			<p id = "resultsBold">{{ from_currency_label }}      << &nbsp >>     {{ to_currency_label }}</p>
+			<p>[1.00 {{ from_currency }} = {{ unit_rate }} {{ to_currency }}]</p>
+			<p>Currency rates last updated {{ last_update }}</p>
 			<br/>
 		</div>
+		<br/>
 		<div class="convertPanel">
 			<a href="{{ url_for('convert') }}" class="convertLink">Another Conversion</a>
 		</div>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
 	{% else %}
 	
 		<h3>Select from currencies and enter conversion amount</h3>
@@ -46,6 +53,6 @@ D Murphy -->
 
 			{{ form.convertButton }}
 		</form>
-	
+		<br/>
 	{% endif %}
 {% endblock %}

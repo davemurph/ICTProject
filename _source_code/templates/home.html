@@ -3,15 +3,20 @@
 {% block content %}
 	<div class="jumbo">
 		<h2>welcome to PyConvert web app</h2>
-		<h3 class="home">your spot for live currency conversions</h3>
+		<h3>your spot for live currency conversions</h3>
 		<hr>
 	</div>
-	
+	<br/>
 	<form action="{{ url_for('home') }}" method="post">
 		{{ form.hidden_tag() }}
 			
 		{{ form.enterButton() }}
 	</form>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
 	
 	{% for message in get_flashed_messages() %}
 		<div class="flash">{{ message }}</div>

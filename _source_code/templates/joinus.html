@@ -5,8 +5,8 @@ D Murphy -->
 {% extends "baseLayout.html" %}
 
 {% block content %}	
-	<h2>Sign up</h2>
-	<h3>Create an account with us to access live currency conversions</h3>
+	<h2 class = "login">join us</h2>
+	<h3 class = "login">create an account to access live currency conversions</h3>
 
 	{% for message in form.email.errors %}
 		<div class = "flash">{{ message }}</div>
